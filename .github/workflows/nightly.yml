@@ -22,6 +22,9 @@ jobs:
       - name: Get S3S latest commit
         run: |
           echo S3S_COMMIT=$(cd s3s && git rev-parse --short HEAD) >> $GITHUB_ENV
+      - name: Read Docker Image Identifiers
+        run: |
+          echo REPO_OWNER=$(echo ${{ env.GITHUB_REPOSITORY_OWNER }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
       - name: Configure Github Package Registry
         run: echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
       - name: Login to Docker Hub
@@ -38,11 +41,11 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            ghcr.io/${{ env.IMAGE_REPOSITORY }}:latest-${{ steps.date.outputs.date }}
-            ghcr.io/${{ env.IMAGE_REPOSITORY }}:latest
-            ghcr.io/${{ env.IMAGE_REPOSITORY }}:s3s-${{ env.S3S_COMMIT }}
-            docker.io/${{ env.IMAGE_REPOSITORY }}:latest-${{ steps.date.outputs.date }}
-            docker.io/${{ env.IMAGE_REPOSITORY }}:latest
-            docker.io/${{ env.IMAGE_REPOSITORY }}:s3s-${{ env.S3S_COMMIT }}
+            ghcr.io/${{ env.REPO_OWNER }}/s3s:latest-${{ steps.date.outputs.date }}
+            ghcr.io/${{ env.REPO_OWNER }}/s3s:latest
+            ghcr.io/${{ env.REPO_OWNER }}/s3s:commit-${{ env.S3S_COMMIT }}
+            docker.io/${{ env.REPO_OWNER }}/s3s:latest-${{ steps.date.outputs.date }}
+            docker.io/${{ env.REPO_OWNER }}/s3s:latest
+            docker.io/${{ env.REPO_OWNER }}/s3s:commit-${{ env.S3S_COMMIT }}
         env:
             S3S_COMMIT: ${{ env.S3S_COMMIT }}
