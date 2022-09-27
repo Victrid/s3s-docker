@@ -24,7 +24,7 @@ jobs:
           echo S3S_COMMIT=$(cd s3s && git rev-parse --short HEAD) >> $GITHUB_ENV
       - name: Read Docker Image Identifiers
         run: |
-          echo REPO_OWNER=$(echo ${{ env.GITHUB_REPOSITORY_OWNER }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
+          echo REPO_OWNER=$(echo $GITHUB_REPOSITORY_OWNER | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
       - name: Configure Github Package Registry
         run: echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
       - name: Login to Docker Hub
