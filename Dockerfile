@@ -1,6 +1,6 @@
 FROM python:3.9-alpine3.14 as build
 
-ARG S3S_COMMIT="f74f102"
+ARG S3S_COMMIT="f4b6a4c"
 
 RUN apk --update --no-cache add build-base zlib-dev jpeg-dev
 
@@ -13,8 +13,8 @@ WORKDIR /opt/app
 RUN pip install -r requirements.txt
 
 # Make sure *.pyc files have generated
-RUN echo '{"api_key":"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx","cookie":"","session_token":"","user_lang":"ja-JP"}' > config.txt \
-    && ./s3s.py -h \
+RUN echo '{"api_key": "1234567890123456789012345678901234567890123", "acc_loc": "", "gtoken": "", "bullettoken": "", "session_token": "", "f_gen": "https://api.imink.app/f"}' > config.txt \
+    && python3 ./s3s.py -h \
     && rm config.txt
 
 # Cleanup
@@ -28,6 +28,8 @@ COPY --from=build /usr/local/lib/python3.9/site-packages /usr/local/lib/python3.
 COPY entrypoint.sh /entrypoint.sh
 COPY --from=build /opt/app /opt/app
 
+RUN chmod a+x /entrypoint.sh
+
 ENV S3S_CONFIG=""
 
-ENTRYPOINT ["/entrypoint.sh", "./s3s.py"]
+ENTRYPOINT ["/entrypoint.sh", "python3", "./s3s.py"]
