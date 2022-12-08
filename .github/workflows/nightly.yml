@@ -18,7 +18,7 @@ jobs:
             path: "s3s"
       - name: Get current date
         id: date
-        run: echo "::set-output name=date::$(date +'%Y%m%d')"
+        run: echo "date=$(date +'%Y%m%d')" >> $GITHUB_OUTPUT
       - name: Get S3S latest commit
         run: |
           echo S3S_COMMIT=$(cd s3s && git rev-parse --short HEAD) >> $GITHUB_ENV
@@ -44,6 +44,8 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
+          build-args: |
+            S3S_COMMIT=${{ env.S3S_COMMIT }}
           tags: |
             ghcr.io/${{ env.REPO_OWNER }}/s3s:latest-${{ steps.date.outputs.date }}
             ghcr.io/${{ env.REPO_OWNER }}/s3s:latest
@@ -51,5 +53,3 @@ jobs:
             docker.io/${{ env.REPO_OWNER }}/s3s:latest-${{ steps.date.outputs.date }}
             docker.io/${{ env.REPO_OWNER }}/s3s:latest
             docker.io/${{ env.REPO_OWNER }}/s3s:commit-${{ env.S3S_COMMIT }}
-        env:
-            S3S_COMMIT: ${{ env.S3S_COMMIT }}
