@@ -13,7 +13,7 @@ WORKDIR /opt/app
 RUN pip install -r requirements.txt
 
 # Make sure *.pyc files have generated
-RUN echo '{"api_key": "1234567890123456789012345678901234567890123", "acc_loc": "", "gtoken": "", "bullettoken": "", "session_token": "", "f_gen": "https://api.imink.app/f"}' > config.txt \
+RUN echo '{"api_key": "1234567890123456789012345678901234567890123", "acc_loc": "en-US", "gtoken": "", "bullettoken": "", "session_token": "", "f_gen": "https://api.imink.app/f"}' > config.txt \
     && python3 ./s3s.py -h \
     && rm config.txt
 
